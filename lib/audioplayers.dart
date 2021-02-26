@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
+import 'audioplayers_windows.dart';
+
 typedef StreamController CreateStreamController();
 typedef void TimeChangeHandler(Duration duration);
 typedef void SeekHandler(bool finished);
@@ -335,6 +337,10 @@ class AudioPlayer {
     final Map<String, dynamic> withPlayerId = Map.of(arguments)
       ..['playerId'] = playerId
       ..['mode'] = mode.toString();
+    
+    if(Platform.isWindows){
+      return AudioplayersWindows.invokeMethod(method, withPlayerId);
+    }
 
     return _channel
         .invokeMethod(method, withPlayerId)
